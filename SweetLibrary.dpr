@@ -24,9 +24,8 @@ uses
 
 begin
   Application.Initialize;
-  Application.CreateForm(TFrm_Cad_Livro_F1, Frm_Cad_Livro_F1);
   Application.CreateForm(TTDSServerModuleBaseDados, TDSServerModuleBaseDados);
-  Application.CreateForm(TFrm_Cad_Usuarios_F1, Frm_Cad_Usuarios_F1);
+  Application.CreateForm(TFrm_Pdr_Login_F2, Frm_Pdr_Login_F2);
   Application.Run;
 
 end.

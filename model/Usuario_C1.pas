@@ -78,17 +78,12 @@ function TUsuario.Gravar(Usuario: TUsuario): Boolean;
 begin
   try
     Result := TGenericDAO.Insert(Usuario);
-
   except
     on E:Exception do
     begin
       Result := TGenericDAO.Update(Usuario);
     end;
-
   end;
-
-
-
 end;
 
 procedure TUsuario.Setnome(const Value: String);

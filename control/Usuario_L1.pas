@@ -5,7 +5,7 @@ interface
 uses
   Db, DBClient, GenericDao, Usuario_C1, TEntity, CAtribEntity,
   Firedac.comp.client, Grids,
-  SysUtils;
+  SysUtils,System.Hash;
 
 type
   TUsuario_L1 = class
@@ -37,6 +37,7 @@ type
     function Excluir: Boolean;
     procedure BuscarUsuarios;
     function BuscarUsuario(Usuario: String): Boolean;
+    function LoginUsuario(Usuario, Senha: String): Boolean;
 
     constructor Create;
     destructor Destroy;
@@ -69,7 +70,6 @@ begin
   finally
     vltUsuario.Free;
   end;
-
 end;
 
 procedure TUsuario_L1.BuscarUsuarios;
@@ -149,6 +149,32 @@ begin
     UsuarioGravar.Free;
   end;
 
+end;
+
+function TUsuario_L1.LoginUsuario(Usuario, Senha: String): Boolean;
+var
+  vltUsuario: TUsuario;
+  Crypt : THashSHA1;
+begin
+  try
+    Result := False;
+    Crypt  := THashSHA1.Create;
+
+    vltUsuario := TUsuario.Create;
+    vltUsuario.usuario := USUARIO;
+
+    // Busca livro e ja preenche table para tratamentos
+    TBUsuario.Close;
+    TBUsuario.AppendData(vltUsuario.BuscarUsuario(vltUsuario));
+
+    if TBUsuario.RecordCount > 0 then
+    begin
+      Senha := Crypt.GetHashString(Senha);
+      Result := TBUsuario.FieldByName('senha').AsString = Senha;
+    end;
+  finally
+    vltUsuario.Free;
+  end;
 end;
 
 procedure TUsuario_L1.PopulaCampos;
